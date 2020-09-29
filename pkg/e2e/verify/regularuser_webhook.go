@@ -53,7 +53,7 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 		ginkgo.It("kube:system can create autoscalers", func() {
 			defer func() {
 				h.Impersonate(rest.ImpersonationConfig{})
-				h.Kube().AutoscalingV1().RESTClient().Delete().Resource(*autoscalingv1.ClusterAutoscaler) //TODO: Verify this removes the cluster autoscaler
+				h.Kube().AutoscalingV1().RESTClient().Delete().Resource(*autoscalingv1.ClusterAutoscaler)
 			}()
 
 			h.Impersonate(rest.ImpersonationConfig{
@@ -73,7 +73,7 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 			defer func() {
 				h.Impersonate(rest.ImpersonationConfig{})
 				deleteUser(user.Name, h)
-				h.Kube().AutoscalingV1().RESTClient().Delete().Resource(*autoscalingv1.ClusterAutoscaler) // TODO: Verify this removes the cluster autoscaler
+				h.Kube().AutoscalingV1().RESTClient().Delete().Resource(*autoscalingv1.ClusterAutoscaler)
 			}()
 
 			h.Impersonate(rest.ImpersonationConfig{
@@ -95,7 +95,9 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 					"system:authenticated",
 				},
 			})
-			_, err := h.CreateServiceAccounts().Kube().CoreV1().Nodes().Update(ctx.Todo, node *v1.Node, opts metav1.UpdateOptions) (*v1.Node, error) //Todo : Fix node update?
+			nodes, err := h.Kube().CoreV1().Nodes().List(context.TODO(), metav1.ListOptions{})
+			node := nodes.Items[0]
+			_, err = h.Kube().CoreV1().Nodes().Update(context.TODO(), &node, metav1.UpdateOptions{})
 			Expect(err).NotTo(HaveOccurred())
 		}, float64(viper.GetFloat64(config.Tests.PollingTimeout)))
 
@@ -106,10 +108,12 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 					"system:unauthenticated",
 				},
 			})
-			_, err := h.CreateServiceAccounts().Kube().CoreV1().Nodes().Update(ctx context.Context, node *v1.Node, opts metav1.UpdateOptions) (*v1.Node, error) //Todo : Fix node update?
+			nodes, err := h.Kube().CoreV1().Nodes().List(context.TODO(), metav1.ListOptions{})
+			node := nodes.Items[0]
+			_, err = h.Kube().CoreV1().Nodes().Update(context.TODO(), &node, metav1.UpdateOptions{})
 			Expect(err).To(HaveOccurred())
 		}, float64(viper.GetFloat64(config.Tests.PollingTimeout)))
-		
+
 		ginkgo.It("unpriv users cannot delete nodes", func() {
 			userName := util.RandomStr(5) + "@customdomain"
 			user, err := createUser(userName, []string{}, h)
@@ -124,7 +128,9 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 					"system:unauthenticated",
 				},
 			})
-			_, err = h.CreateServiceAccounts().Kube().CoreV1().Nodes().Delete(ctx context.Context, node *v1.Node, opts metav1.UpdateOptions) err // Todo: Verify node deletion
+			nodes, err := h.Kube().CoreV1().Nodes().List(context.TODO(), metav1.ListOptions{})
+			node := nodes.Items[0]
+			_, err = h.Kube().CoreV1().Nodes().Delete(context.TODO(), node.Name, metav1.DeleteOptions{})(error)
 			Expect(err).To(HaveOccurred())
 		}, float64(viper.GetFloat64(config.Tests.PollingTimeout)))
 
@@ -144,7 +150,9 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 					"system:authenticated:oauth",
 				},
 			})
-			_, err = h.CreateServiceAccounts().Kube().CoreV1().Nodes().Delete(ctx context.Context, node *v1.Node, opts metav1.UpdateOptions) err // Todo: Verify node deletion
+			nodes, err := h.Kube().CoreV1().Nodes().List(context.TODO(), metav1.ListOptions{})
+			node := nodes.Items[0]
+			_, err = h.Kube().CoreV1().Nodes().Delete(context.TODO(), node.Name, metav1.DeleteOptions{})(error)
 			Expect(err).NotTo(HaveOccurred())
 		}, float64(viper.GetFloat64(config.Tests.PollingTimeout)))
 
@@ -164,27 +172,9 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 					"system:authenticated:oauth",
 				},
 			})
-			_, err = h.CreateServiceAccounts().Kube().CoreV1().Nodes().Delete(ctx context.Context, node *v1.Node, opts metav1.UpdateOptions) err // Todo: Verify node deletion
-			Expect(err).NotTo(HaveOccurred())
-		}, float64(viper.GetFloat64(config.Tests.PollingTimeout)))
-
-		ginkgo.It("osd-sre-admins can delete clusterversions", func() {
-			userName := util.RandomStr(5) + "@customdomain"
-			user, err := createUser(userName, []string{}, h)
-			defer func() {
-				h.Impersonate(rest.ImpersonationConfig{})
-				deleteUser(user.Name, h)
-			}()
-
-			h.Impersonate(rest.ImpersonationConfig{
-				UserName: "someuser@customdomain",
-				Groups: []string{
-					"osd-sre-admins",
-					"system:authenticated",
-					"system:authenticated:oauth",
-				},
-			})
-			_, err = h.CreateServiceAccounts().Kube().CoreV1().Nodes().Delete(ctx context.Context, node *v1.Node, opts metav1.UpdateOptions) err // Todo: Verify node deletion
+			nodes, err := h.Kube().CoreV1().Nodes().List(context.TODO(), metav1.ListOptions{})
+			node := nodes.Items[0]
+			_, err = h.Kube().CoreV1().Nodes().Delete(context.TODO(), node.Name, metav1.DeleteOptions{})(error)
 			Expect(err).NotTo(HaveOccurred())
 		}, float64(viper.GetFloat64(config.Tests.PollingTimeout)))
 
