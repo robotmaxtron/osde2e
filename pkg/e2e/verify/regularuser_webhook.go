@@ -72,7 +72,7 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 			user, err := createUser(userName, []string{}, h)
 			defer func() {
 				h.Impersonate(rest.ImpersonationConfig{})
-				deleteUser(user.Name, h)
+				h.User().UserV1().Users().Delete(context.TODO(), user.Name, metav1.DeleteOptions{})
 				h.Kube().AutoscalingV1().RESTClient().Delete().Resource(*autoscalingv1.ClusterAutoscaler)
 			}()
 
@@ -119,7 +119,7 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 			user, err := createUser(userName, []string{}, h)
 			defer func() {
 				h.Impersonate(rest.ImpersonationConfig{})
-				deleteUser(user.Name, h)
+				h.User().UserV1().Users().Delete(context.TODO(), user.Name, metav1.DeleteOptions{})
 			}()
 
 			h.Impersonate(rest.ImpersonationConfig{
@@ -139,7 +139,7 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 			user, err := createUser(userName, []string{}, h)
 			defer func() {
 				h.Impersonate(rest.ImpersonationConfig{})
-				deleteUser(user.Name, h)
+				h.User().UserV1().Users().Delete(context.TODO(), user.Name, metav1.DeleteOptions{})
 			}()
 
 			h.Impersonate(rest.ImpersonationConfig{
@@ -161,7 +161,7 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 			user, err := createUser(userName, []string{}, h)
 			defer func() {
 				h.Impersonate(rest.ImpersonationConfig{})
-				deleteUser(user.Name, h)
+				h.User().UserV1().Users().Delete(context.TODO(), user.Name, metav1.DeleteOptions{})
 			}()
 
 			h.Impersonate(rest.ImpersonationConfig{
@@ -189,10 +189,6 @@ func createUser(userName string, groups []string, h *helper.H) (*userv1.User, er
 		Groups: groups,
 	}
 	return h.User().UserV1().Users().Create(context.TODO(), user, metav1.CreateOptions{})
-}
-
-func deleteUser(userName string, h *helper.H) error {
-	return h.User().UserV1().Users().Delete(context.TODO(), userName, metav1.DeleteOptions{})
 }
 
 //Pulled from cluster-autoscaler-operator
