@@ -73,9 +73,8 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 			defer func() {
 				h.Impersonate(rest.ImpersonationConfig{})
 				deleteUser(user.Name, h)
-				h.Kube().AutoscalingV1().RESTClient().Delete() //HPA?
+				h.Kube().AutoscalingV1().RESTClient().Delete().Resource(*autoscalingv1.ClusterAutoscaler) // TODO: Verify this removes the cluster autoscaler
 			}()
-			Expect(err).NotTo(HaveOccurred())
 
 			h.Impersonate(rest.ImpersonationConfig{
 				UserName: "test@customdomain",
@@ -118,7 +117,6 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 				h.Impersonate(rest.ImpersonationConfig{})
 				deleteUser(user.Name, h)
 			}()
-			Expect(err).NotTo(HaveOccurred())
 
 			h.Impersonate(rest.ImpersonationConfig{
 				UserName: "test@customdomain",
@@ -137,7 +135,6 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 				h.Impersonate(rest.ImpersonationConfig{})
 				deleteUser(user.Name, h)
 			}()
-			Expect(err).NotTo(HaveOccurred())
 
 			h.Impersonate(rest.ImpersonationConfig{
 				UserName: "someuser@customdomain",
@@ -158,7 +155,6 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 				h.Impersonate(rest.ImpersonationConfig{})
 				deleteUser(user.Name, h)
 			}()
-			Expect(err).NotTo(HaveOccurred())
 
 			h.Impersonate(rest.ImpersonationConfig{
 				UserName: "someuser@customdomain",
@@ -171,6 +167,27 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 			_, err = h.CreateServiceAccounts().Kube().CoreV1().Nodes().Delete(ctx context.Context, node *v1.Node, opts metav1.UpdateOptions) err // Todo: Verify node deletion
 			Expect(err).NotTo(HaveOccurred())
 		}, float64(viper.GetFloat64(config.Tests.PollingTimeout)))
+
+		ginkgo.It("osd-sre-admins can delete clusterversions", func() {
+			userName := util.RandomStr(5) + "@customdomain"
+			user, err := createUser(userName, []string{}, h)
+			defer func() {
+				h.Impersonate(rest.ImpersonationConfig{})
+				deleteUser(user.Name, h)
+			}()
+
+			h.Impersonate(rest.ImpersonationConfig{
+				UserName: "someuser@customdomain",
+				Groups: []string{
+					"osd-sre-admins",
+					"system:authenticated",
+					"system:authenticated:oauth",
+				},
+			})
+			_, err = h.CreateServiceAccounts().Kube().CoreV1().Nodes().Delete(ctx context.Context, node *v1.Node, opts metav1.UpdateOptions) err // Todo: Verify node deletion
+			Expect(err).NotTo(HaveOccurred())
+		}, float64(viper.GetFloat64(config.Tests.PollingTimeout)))
+
 	})
 })
 
