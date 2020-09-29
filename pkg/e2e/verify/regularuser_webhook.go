@@ -96,7 +96,7 @@ var _ = ginkgo.Describe(userWebhookTestName, func() {
 					"system:authenticated",
 				},
 			})
-			_, err := h.CreateServiceAccounts().Kube().CoreV1().Nodes().Get() //How to "update" node object?
+			_, err := h.CreateServiceAccounts().Kube().CoreV1().Nodes().Update(ctx.Todo, node *v1.Node, opts metav1.UpdateOptions) (*v1.Node, error) //Todo : Fix node update?
 			Expect(err).NotTo(HaveOccurred())
 		}, float64(viper.GetFloat64(config.Tests.PollingTimeout)))
 
