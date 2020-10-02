@@ -12,20 +12,31 @@ require (
 	github.com/dgryski/go-gk v0.0.0-20200319235926-a69029f61654 // indirect
 	github.com/dgryski/go-lttb v0.0.0-20180810165845-318fcdf10a77 // indirect
 	github.com/emicklei/go-restful v2.9.6+incompatible
+	github.com/evanphx/json-patch v4.9.0+incompatible // indirect
 	github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32
+	github.com/go-logr/logr v0.2.1 // indirect
 	github.com/google/go-github/v31 v31.0.0
 	github.com/google/uuid v1.1.1
 	github.com/hashicorp/go-multierror v1.1.0
 	github.com/hpcloud/tail v1.0.0
 	github.com/influxdata/tdigest v0.0.1 // indirect
+	github.com/kr/pretty v0.2.0 // indirect
 	github.com/kylelemons/godebug v1.1.0
 	github.com/markbates/pkger v0.16.0
 	github.com/onsi/ginkgo v1.13.0
 	github.com/onsi/gomega v1.10.1
+<<<<<<< HEAD
 	github.com/openshift-online/ocm-sdk-go v0.1.130
 	github.com/openshift/api v0.0.0-20200522173408-17ada6e4245b
 	github.com/openshift/client-go v0.0.0-20200326155132-2a6cd50aedd0
+=======
+	github.com/openshift-online/ocm-sdk-go v0.1.128
+	github.com/openshift/api v0.0.0-20200916161728-83f0cb093902
+	github.com/openshift/build-machinery-go v0.0.0-20200819073603-48aa266c95f7 // indirect
+	github.com/openshift/client-go v0.0.0-20200827190008-3062137373b5
+>>>>>>> c5f8ab8c... Updated go.mod, removed node tests, updated go.sum
 	github.com/openshift/cluster-api v0.0.0-20191129101638-b09907ac6668
+	github.com/openshift/cluster-autoscaler-operator v0.0.1-0.20200930132529-52ee4f03604b
 	github.com/openshift/machine-api-operator v0.2.1-0.20200529045911-d19e8d007f7c
 	github.com/openshift/managed-upgrade-operator v0.0.0-20200820052802-5d57e1785b53
 	github.com/openshift/moactl v0.0.11
@@ -34,20 +45,39 @@ require (
 	github.com/prometheus/alertmanager v0.21.0
 	github.com/prometheus/client_golang v1.7.1
 	github.com/prometheus/common v0.13.0
+	github.com/robfig/cron v1.2.0 // indirect
 	github.com/slack-go/slack v0.6.5
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.0
+	github.com/stoewer/go-strcase v1.2.0 // indirect
 	github.com/streadway/quantile v0.0.0-20150917103942-b0c588724d25 // indirect
 	github.com/tsenart/go-tsz v0.0.0-20180814235614-0bd30b3df1c3 // indirect
 	github.com/tsenart/vegeta v12.7.0+incompatible
 	github.com/vmware-tanzu/velero v1.5.0-beta.1.0.20200831161009-1dcaa1bf7512
+<<<<<<< HEAD
 	golang.org/x/net v0.0.0-20200707034311-ab3426394381
 	gopkg.in/yaml.v3 v3.0.0-20191120175047-4206685974f2
 	k8s.io/api v0.19.2
 	k8s.io/apimachinery v0.19.2
 	k8s.io/client-go v12.0.0+incompatible
 	k8s.io/utils v0.0.0-20200729134348-d5654de09c73
+=======
+	go.etcd.io/etcd v0.5.0-alpha.5.0.20200819165624-17cef6e3e9d5 // indirect
+	golang.org/x/net v0.0.0-20200707034311-ab3426394381
+	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
+	k8s.io/api v0.19.0
+	k8s.io/apiextensions-apiserver v0.19.0 // indirect
+	k8s.io/apimachinery v0.19.0
+	k8s.io/apiserver v0.19.0 // indirect
+	k8s.io/client-go v12.0.0+incompatible
+	k8s.io/component-base v0.19.0 // indirect
+	k8s.io/klog/v2 v2.3.0 // indirect
+	k8s.io/kube-aggregator v0.19.0 // indirect
+	k8s.io/utils v0.0.0-20200729134348-d5654de09c73
+	sigs.k8s.io/controller-runtime v0.6.2 // indirect
+	sigs.k8s.io/kube-storage-version-migrator v0.0.3 // indirect
+>>>>>>> c5f8ab8c... Updated go.mod, removed node tests, updated go.sum
 )
 
 replace (
